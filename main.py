@@ -156,82 +156,99 @@ def menu2(frame):
 
     
     def actualiserNom(event):
+        
         nom =entreeNom.get()
-        if event.keysym != 'BackSpace' : 
+
+        if event.keysym != 'BackSpace': 
 
             nom += event.char
         else: 
             nom = nom[:-1]
 
         listeNom.delete(0,END)
-        if  nom != None:
+        if  len(nom)>0:
 
             nom_possible = DataBasePart.recherche(nom,'Nom')
             for i in nom_possible:
                 listeNom.insert(END , i)
-                
-    def actualiserPrenom(event):
-        prenom =entreePrenom.get()
-        if event.keysym != 'BackSpace':
 
+    def actualiserPrenom(event):
+        """
+            Variable : event ==> an event like a key pressed or an intteraction on an object
+
+            Goal : Show all the forname that are included in the database who have the same begining than the entry.get
+        """
+    
+        prenom =entreePrenom.get()
+        if event.keysym != 'BackSpace' :
+            
             prenom += event.char
         else:
             prenom = prenom[:-1]
         
         listePrenom.delete(0, END)
-        if prenom != None:
 
+        if len(prenom)>0:
             prenom_possible = DataBasePart.recherche(prenom,'Prenom')
             for i in prenom_possible:
                 listePrenom.insert(END , i)
         
         
-
+    #Divising our page in Frame
     framehaut = Frame(frame , bg = '#2864c0')
-    framehaut.place(relx= 0.03 , rely=0.05 , relheight= 0.075 , relwidth= 0.94)
-
     frameimg = Frame(frame ,bg='#2864c0')
-    frameimg.place(relx=0.4, rely=0.15 , relheight= 0.80 , relwidth=0.57)
-
     framecrit = Frame(frame , bg = '#2864c0')
+
+    #Placing our frames
+    framehaut.place(relx= 0.03 , rely=0.05 , relheight= 0.075 , relwidth= 0.94)
+    frameimg.place(relx=0.4, rely=0.15 , relheight= 0.80 , relwidth=0.57)
     framecrit.place(relx=0.03 , rely=0.15 , relheight=0.80 , relwidth=0.35)
 
+    #Placing the Image
     photo_img = ImageTk.PhotoImage(img)
     imgFrame = Label(frameimg, image=photo_img)
     imgFrame.pack(fill='none',expand=False,anchor=CENTER)
-    imgFrame.bind( "<Configure>",lambda event: resize_image(event, img,height,width))
-
     
+    
+    #A changer
     button1 = Button(framehaut, activebackground='blue', background='purple',height=1 ,width = 1,command=gotopage3)
     button1.pack(side ='right')
     button1 = Button(framehaut, activebackground='blue', background='purple',height=1 ,width = 1,command=goback)
     button1.pack(side = "left")
 
-
+    #We define all the object of the frame : framecrit
     labelnom = Label(framecrit , text='Nom' )
-    labelnom.place(rely=0.1 , relheight= 0.05 , relx = 0.05 , relwidth= 0.4)
-
     labelprenom = Label(framecrit, text='Prenom')
-    labelprenom.place(rely=0.1 , relheight= 0.05 , relx = 0.55 , relwidth= 0.4)    
 
     entreeNom = Entry(framecrit, background='red')
+    entreePrenom = Entry(framecrit, background='blue')
+
+    listeNom = Listbox(framecrit , bg='grey')
+    listePrenom = Listbox(framecrit , bg='grey')
+
+    button1 = Button(framecrit, activebackground='blue', background='purple',height=1 ,width = 1,command=change)
+
+    #We place all the object on the frame
+    labelnom.place(rely=0.1 , relheight= 0.05 , relx = 0.05 , relwidth= 0.4)
+    labelprenom.place(rely=0.1 , relheight= 0.05 , relx = 0.55 , relwidth= 0.4)    
+
     entreeNom.place(rely = 0.17 , relheight=0.05 , relwidth=0.4 , relx=0.05)
+    entreePrenom.place(rely = 0.17 , relheight=0.05 , relwidth=0.4 , relx=0.55)
+    
+    listeNom.place(rely=0.3 , relheight= 0.3 , relx = 0.05 , relwidth= 0.4)
+    listePrenom.place(rely=0.3 , relheight= 0.3 , relx = 0.55 , relwidth= 0.4)
+
+    button1.place(rely = 0.8, relx=0.35, relheight= 0.05 , relwidth= 0.3)
+
+
+    #Binding all our event
+    imgFrame.bind( "<Configure>",lambda event: resize_image(event, img,height,width))
+
     entreeNom.bind('<FocusIn>', actualiserNom)
     entreeNom.bind('<Key>' , actualiserNom)
 
-    entreePrenom = Entry(framecrit, background='blue')
-    entreePrenom.place(rely = 0.17 , relheight=0.05 , relwidth=0.4 , relx=0.55)
     entreePrenom.bind('<FocusIn>', actualiserPrenom)
     entreePrenom.bind('<Key>' , actualiserPrenom)
-
-    listeNom = Listbox(framecrit , bg='grey')
-    listeNom.place(rely=0.3 , relheight= 0.3 , relx = 0.05 , relwidth= 0.4)
-
-    listePrenom = Listbox(framecrit , bg='grey')
-    listePrenom.place(rely=0.3 , relheight= 0.3 , relx = 0.55 , relwidth= 0.4)
-
-    button1 = Button(framecrit, activebackground='blue', background='purple',height=1 ,width = 1,command=change)
-    button1.place(rely = 0.8, relx=0.35, relheight= 0.05 , relwidth= 0.3)
 
     frame.mainloop()
 
