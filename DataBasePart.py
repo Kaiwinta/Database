@@ -7,34 +7,7 @@ dot = Digraph(comment = "Un simple graphe", engine = 'circo')
 
 #Relier Le python avec la base de donnée
 conn = sqlite3.connect('user.db')
-"""
-def afficher_points(graphe , db):
-    
-        Cette fonction permet de lister tout les Utilisateurs de la base de donnée 'db'
-        Puis de les afficher sur un graphe  'graphe'
-    
-    c = db.cursor()
-    Liste_user = []
-    for i in c.execute("SELECT * FROM Utilisateur"):
-        Liste_user.append((i[1],i[2]))
 
-    for i in range(len(Liste_user)):
-        graphe.node(str(i+1),str(Liste_user[i]))
-
-def afficher_liens(grapheavecpoints , db):
-    
-        Cette fonction permet de lister tout les liens de la base de donnée 'db'
-        Puis de les afficher sur un graphe  'graphe'
-   
-    afficher_points(grapheavecpoints , db)
-    c = db.cursor()
-    Liste_Liens = []
-    #Partie Bd to python
-    for i in c.execute("SELECT * FROM Follow"):
-        Liste_Liens.append((i[0],i[1]))
-    #Partie python to gv
-    for i in range(len(Liste_Liens)):
-        grapheavecpoints.edge(str(Liste_Liens[i][0]),str(Liste_Liens[i][1]))"""
 
 def afficher_graphe_perso(graphe, db, nom, prenom):
     """
@@ -101,7 +74,7 @@ def recherche(Entree,categorie):
         mot+=i
     
     Liste_possible = []
-    requete = "SELECT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+mot+"%'"
+    requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+mot+"%'"
     for row in c.execute(requete):
         Liste_possible.append(row[0])
 

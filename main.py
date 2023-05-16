@@ -157,15 +157,34 @@ def menu2(frame):
     
     def actualiserNom(event):
         nom =entreeNom.get()
-        nom += event.char
-        nom_possible = DataBasePart.recherche(nom,'Nom')
-        print(nom_possible[:])
+        if event.keysym != 'BackSpace' : 
 
+            nom += event.char
+        else: 
+            nom = nom[:-1]
+
+        listeNom.delete(0,END)
+        if  nom != None:
+
+            nom_possible = DataBasePart.recherche(nom,'Nom')
+            for i in nom_possible:
+                listeNom.insert(END , i)
+                
     def actualiserPrenom(event):
         prenom =entreePrenom.get()
-        prenom += event.char
-        prenom_possible = DataBasePart.recherche(prenom,'Prenom')
-        print(prenom_possible[:])
+        if event.keysym != 'BackSpace':
+
+            prenom += event.char
+        else:
+            prenom = prenom[:-1]
+        
+        listePrenom.delete(0, END)
+        if prenom != None:
+
+            prenom_possible = DataBasePart.recherche(prenom,'Prenom')
+            for i in prenom_possible:
+                listePrenom.insert(END , i)
+        
         
 
     framehaut = Frame(frame , bg = '#2864c0')
@@ -202,7 +221,7 @@ def menu2(frame):
 
     entreePrenom = Entry(framecrit, background='blue')
     entreePrenom.place(rely = 0.17 , relheight=0.05 , relwidth=0.4 , relx=0.55)
-    entreeNom.bind('<FocusIn>', actualiserPrenom)
+    entreePrenom.bind('<FocusIn>', actualiserPrenom)
     entreePrenom.bind('<Key>' , actualiserPrenom)
 
     listeNom = Listbox(framecrit , bg='grey')
