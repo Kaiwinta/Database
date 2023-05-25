@@ -66,7 +66,7 @@ def afficher_graphe_perso(graphe, db, nom, prenom):
 
     
     
-def recherche(Entree,categorie):
+def recherche(Entree,categorie,secondecate,secondeentree):
     c = conn.cursor()
 
     mot = ''
@@ -74,7 +74,11 @@ def recherche(Entree,categorie):
         mot+=i
     
     Liste_possible = []
-    requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+mot+"%'"
+    if secondecate:
+        requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+mot+"%' AND "+secondecate+" LIKE '"+secondeentree+"'%"
+    else:
+        requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+mot+"%'"
+
     for row in c.execute(requete):
         Liste_possible.append(row[0])
 

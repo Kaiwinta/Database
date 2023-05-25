@@ -167,8 +167,11 @@ def menu2(frame):
 
         listeNom.delete(0,END)
         if  len(nom)>0:
-
-            nom_possible = DataBasePart.recherche(nom,'Nom')
+            
+            if len(entreePrenom.get())>0:
+                nom_possible = DataBasePart.recherche(nom,'Nom','Prenom',entreePrenom.get())
+            else:
+                nom_possible = DataBasePart.recherche(nom,'Nom',None,None)
             for i in nom_possible:
                 listeNom.insert(END , i)
 
@@ -189,7 +192,11 @@ def menu2(frame):
         listePrenom.delete(0, END)
 
         if len(prenom)>0:
-            prenom_possible = DataBasePart.recherche(prenom,'Prenom')
+
+            if len(entreeNom.get())>0:
+                prenom_possible = DataBasePart.recherche(prenom,'Prenom','Nom',entreeNom.get())
+            else:
+                prenom_possible = DataBasePart.recherche(prenom,'Prenom',None,None)
             for i in prenom_possible:
                 listePrenom.insert(END , i)
         
