@@ -67,22 +67,37 @@ def afficher_graphe_perso(graphe, db, nom, prenom):
     
     
 def recherche(Entree,categorie,secondecate,secondeentree):
+    """
+    Objectif effectuer une requete Sql Dans tout type de situation et renvoyer une liste des résultats
+
+    Args:
+        Entree (str): Entree principale de la requete SQL
+        categorie (str): La categorie de la Première entree( Nom/ Prenom)
+        secondecate (str): Facultatif ==> Permet d'avoir une deuxième catégorie àa chercher et faire une requete imbriquer
+        secondeentree (str): Aussi Facultatif si la deuxième catégorie != None ==> La valeur de la deuxieme catégorie de rechercher
+
+    Returns:
+        Liste_possible(type : liste): La liste de tout les résultats de la requète SQL
+    """
     c = conn.cursor()
-
-    mot = ''
-    for i in Entree :
-        mot+=i
-    
     Liste_possible = []
-    if secondecate:
-        requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+mot+"%' AND "+secondecate+" LIKE '"+secondeentree+"'%"
-    else:
-        requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+mot+"%'"
 
+    if secondecate !=None:
+        #Verifie si l'on doit faire une requete imbriquer ou une simple
+        requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+Entree+"%' AND "+secondecate+" LIKE '"+secondeentree+"%'"
+    else:
+        requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+Entree+"%'"
+    
+    #Ajout des résultat sous une meilleure forme dans la liste que l'on renvoie
     for row in c.execute(requete):
         Liste_possible.append(row[0])
 
     return Liste_possible
 
-
- 
+"""
+#Jeu de Test
+print(recherche('M','Nom',None,None),'\t premier test juste Nom')
+print(recherche('M','Nom','Prenom','A'),'\t premier test juste Nom')
+print(recherche('T','Prenom',None,None),'\t premier test juste Nom')
+print(recherche('T','Prenom','Nom','F'),'\t premier test juste Nom')
+"""
