@@ -174,7 +174,7 @@ def menu2(frame):
 
         valeur = entree.get()
 
-        if event.keysym != "BackSpace" and  event.keysym !="Tab":
+        if event.keysym != "BackSpace" and  event.keysym !="Tab" and event.keysym !='Enter':
             valeur+= event.char
 
         if event.keysym == "BackSpace":
@@ -185,6 +185,7 @@ def menu2(frame):
         if len (valeur)>0:
             if len(entree.get())>0:
                 possibilite = DataBasePart.recherche(valeur,zone,seconde,entree2.get())
+                print(entree2.get())
             else :
                 possibilite = DataBasePart.recherche(valeur,zone,None,None)
             for i in possibilite:
@@ -194,12 +195,6 @@ def menu2(frame):
         actualiser(event,'Nom')
 
     def actualiserPrenom(event):
-        """
-            Variable : event ==> an event like a key pressed or an intteraction on an object
-
-            Goal : Show all the forname that are included in the database who have the same begining than the entry.get
-        """
-    
         actualiser(event,'Prenom')
         
         
