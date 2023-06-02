@@ -18,7 +18,7 @@ def main():
     main.geometry("1024x574")
     main.title('Outils Graphe Db')
     main.iconbitmap('Images/grv2.ico')
-    
+    main.resizable(False,False)
     #On relie la fenètre au bouton "Echap" avec comme fonction de se détruire
     main.bind('<Escape>',lambda e: main.destroy())
     
@@ -161,30 +161,37 @@ def menu2(frame):
             event (event): L'evenement de la clé préssé ou du focus in dans une des deux zones
             zone (str): soit nom ou prenom hustoire de mieuc gerer les colissions
         """
-    
+        if zone == "Prenom":
+            entree = entreePrenom
+            entree2 = entreeNom
+            liste = listePrenom
+            seconde = "Nom"
+        else :
+            entree = entreeNom
+            entree2 = entreePrenom
+            liste = listeNom
+            seconde = "Prenom"
+
+        valeur = entree.get()
+
+        if event.keysym != "BackSpace" and  event.keysym !="Tab":
+            valeur+= event.char
+
+        if event.keysym == "BackSpace":
+            valeur = valeur[:-1]
+          
+        liste.delete(0,END)
+
+        if len (valeur)>0:
+            if len(entree.get())>0:
+                possibilite = DataBasePart.recherche(valeur,zone,seconde,entree2.get())
+            else :
+                possibilite = DataBasePart.recherche(valeur,zone,None,None)
+            for i in possibilite:
+                liste.insert(END,i)
+
     def actualiserNom(event):
-        #actualiser(event,'Nom')
-        print(event)
-        nom =entreeNom.get()
-
-        if event.keysym != 'BackSpace': 
-
-            nom += event.char
-        else: 
-            nom = nom[:-1]
-
-        listeNom.delete(0,END)
-        if  len(nom)>0:
-            
-            if len(entreePrenom.get())>0:
-                nom_possible = DataBasePart.recherche(nom,'Nom','Prenom',entreePrenom.get())   
-                #l'on doit actualiser le prenom
-            else:
-                nom_possible = DataBasePart.recherche(nom,'Nom',None,None)
-            for i in nom_possible:
-                listeNom.insert(END , i)
-        
-
+        actualiser(event,'Nom')
 
     def actualiserPrenom(event):
         """
@@ -193,26 +200,7 @@ def menu2(frame):
             Goal : Show all the forname that are included in the database who have the same begining than the entry.get
         """
     
-        #Actualiser(eevnt,'Prenom')
-        prenom =entreePrenom.get()
-        if event.keysym != 'BackSpace' :
-            
-            prenom += event.char
-        else:
-            prenom = prenom[:-1]
-        
-        listePrenom.delete(0, END)
-
-        if len(prenom)>0:
-
-            if len(entreeNom.get())>0:
-                prenom_possible = DataBasePart.recherche(prenom,'Prenom','Nom',entreeNom.get())
-                #L'on doit ajouter une actualiser du nom
-            else:
-                prenom_possible = DataBasePart.recherche(prenom,'Prenom',None,None)
-            for i in prenom_possible:
-                listePrenom.insert(END , i)
-    
+        actualiser(event,'Prenom')
         
         
     #Divising our page in Frame
