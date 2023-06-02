@@ -153,10 +153,18 @@ def menu2(frame):
         imgFrame.pack(fill='none',expand=TRUE,)
         imgFrame.bind( "<Configure>",lambda event: resize_image(event, img,height,width))
 
+    def actualiser(event , zone):
+        """
+        Objectif : Actualise la partie voulu et aussi l'autre à chaque event rentrer
 
+        Args:
+            event (event): L'evenement de la clé préssé ou du focus in dans une des deux zones
+            zone (str): soit nom ou prenom hustoire de mieuc gerer les colissions
+        """
     
     def actualiserNom(event):
-        
+        #actualiser(event,'Nom')
+        print(event)
         nom =entreeNom.get()
 
         if event.keysym != 'BackSpace': 
@@ -169,11 +177,14 @@ def menu2(frame):
         if  len(nom)>0:
             
             if len(entreePrenom.get())>0:
-                nom_possible = DataBasePart.recherche(nom,'Nom','Prenom',entreePrenom.get())
+                nom_possible = DataBasePart.recherche(nom,'Nom','Prenom',entreePrenom.get())   
+                #l'on doit actualiser le prenom
             else:
                 nom_possible = DataBasePart.recherche(nom,'Nom',None,None)
             for i in nom_possible:
                 listeNom.insert(END , i)
+        
+
 
     def actualiserPrenom(event):
         """
@@ -182,6 +193,7 @@ def menu2(frame):
             Goal : Show all the forname that are included in the database who have the same begining than the entry.get
         """
     
+        #Actualiser(eevnt,'Prenom')
         prenom =entreePrenom.get()
         if event.keysym != 'BackSpace' :
             
@@ -195,10 +207,12 @@ def menu2(frame):
 
             if len(entreeNom.get())>0:
                 prenom_possible = DataBasePart.recherche(prenom,'Prenom','Nom',entreeNom.get())
+                #L'on doit ajouter une actualiser du nom
             else:
                 prenom_possible = DataBasePart.recherche(prenom,'Prenom',None,None)
             for i in prenom_possible:
                 listePrenom.insert(END , i)
+    
         
         
     #Divising our page in Frame
