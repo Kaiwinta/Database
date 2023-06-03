@@ -161,20 +161,25 @@ def menu2(frame):
             event (Event): L'événement de la clé pressée ou du focus in dans une des deux zones
             zone (str): Soit "Nom" ou "Prenom" pour mieux gérer les collisions
         """
+
+        #L'on défini les variable en fonciton du cas dans lequel l'on est 
         if zone == "Prenom":
             entree = entreePrenom
             entree2 = entreeNom
             liste = listePrenom
+            liste2 = listeNom
             seconde = "Nom"
+
         else:
             entree = entreeNom
             entree2 = entreePrenom
             liste = listeNom
+            liste2 = listePrenom
             seconde = "Prenom"
 
-        print(event)
-        print('est bont')
         valeur = entree.get()
+        valeur2 = entree2.get()
+
         if event.keysym != "BackSpace" and event.keysym != "Tab" and event.keysym != 'Return':
             valeur += event.char
 
@@ -182,14 +187,22 @@ def menu2(frame):
             valeur = valeur[:-1]
 
         liste.delete(0, END)
+        liste2.delete(0,END)
 
-        if len(valeur) > 0:
+        if len(valeur) > 0 or len(valeur2)>0:
             if len(entree2.get()) > 0:
-                possibilite = DataBasePart.recherche(valeur, zone, seconde, entree2.get())
+                possibilite = DataBasePart.recherche(valeur, zone, seconde, valeur2)
+                possibiliteseconde = DataBasePart.recherche(valeur2 ,seconde, zone, valeur)
+                
             else:
                 possibilite = DataBasePart.recherche(valeur, zone, None, None)
+                possibiliteseconde = DataBasePart.recherche(None, seconde, zone, valeur)
+                
             for i in possibilite:
                 liste.insert(END, i)
+            
+            for y in possibiliteseconde:
+                liste2.insert(END, y)
         
     #Divising our page in Frame
     framehaut = Frame(frame , bg = '#2864c0')
@@ -242,7 +255,6 @@ def menu2(frame):
     imgFrame.bind( "<Configure>",lambda event: resize_image(event, img,height,width))
 
     entreeNom.bind('<Key>', lambda event: actualiser(event, "Nom"))
-
 
     entreePrenom.bind('<Key>', lambda event: actualiser(event, "Prenom"))
     frame.mainloop()
