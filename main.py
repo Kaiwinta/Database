@@ -153,50 +153,43 @@ def menu2(frame):
         imgFrame.pack(fill='none',expand=TRUE,)
         imgFrame.bind( "<Configure>",lambda event: resize_image(event, img,height,width))
 
-    def actualiser(event , zone):
+    def actualiser(event, zone):
         """
-        Objectif : Actualise la partie voulu et aussi l'autre à chaque event rentrer
+        Objectif: Actualise la partie voulue et aussi l'autre à chaque événement rentré
 
         Args:
-            event (event): L'evenement de la clé préssé ou du focus in dans une des deux zones
-            zone (str): soit nom ou prenom hustoire de mieuc gerer les colissions
+            event (Event): L'événement de la clé pressée ou du focus in dans une des deux zones
+            zone (str): Soit "Nom" ou "Prenom" pour mieux gérer les collisions
         """
         if zone == "Prenom":
             entree = entreePrenom
             entree2 = entreeNom
             liste = listePrenom
             seconde = "Nom"
-        else :
+        else:
             entree = entreeNom
             entree2 = entreePrenom
             liste = listeNom
             seconde = "Prenom"
 
+        print(event)
+        print('est bont')
         valeur = entree.get()
-
-        if event.keysym != "BackSpace" and  event.keysym !="Tab" and event.keysym !='Enter':
-            valeur+= event.char
+        if event.keysym != "BackSpace" and event.keysym != "Tab" and event.keysym != 'Return':
+            valeur += event.char
 
         if event.keysym == "BackSpace":
             valeur = valeur[:-1]
-          
-        liste.delete(0,END)
 
-        if len (valeur)>0:
-            if len(entree.get())>0:
-                possibilite = DataBasePart.recherche(valeur,zone,seconde,entree2.get())
-                print(entree2.get())
-            else :
-                possibilite = DataBasePart.recherche(valeur,zone,None,None)
+        liste.delete(0, END)
+
+        if len(valeur) > 0:
+            if len(entree2.get()) > 0:
+                possibilite = DataBasePart.recherche(valeur, zone, seconde, entree2.get())
+            else:
+                possibilite = DataBasePart.recherche(valeur, zone, None, None)
             for i in possibilite:
-                liste.insert(END,i)
-
-    def actualiserNom(event):
-        actualiser(event,'Nom')
-
-    def actualiserPrenom(event):
-        actualiser(event,'Prenom')
-        
+                liste.insert(END, i)
         
     #Divising our page in Frame
     framehaut = Frame(frame , bg = '#2864c0')
@@ -248,12 +241,10 @@ def menu2(frame):
     #Binding all our event
     imgFrame.bind( "<Configure>",lambda event: resize_image(event, img,height,width))
 
-    entreeNom.bind('<FocusIn>', actualiserNom)
-    entreeNom.bind('<Key>' , actualiserNom)
+    entreeNom.bind('<Key>', lambda event: actualiser(event, "Nom"))
 
-    entreePrenom.bind('<FocusIn>', actualiserPrenom)
-    entreePrenom.bind('<Key>' , actualiserPrenom)
 
+    entreePrenom.bind('<Key>', lambda event: actualiser(event, "Prenom"))
     frame.mainloop()
 
 def menu3(frame):

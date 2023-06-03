@@ -92,6 +92,7 @@ def recherche(Entree,categorie,secondecate,secondeentree):
     for row in c.execute(requete):
         Liste_possible.append(row[0])
 
+    print(requete)
     return Liste_possible
 
 """
