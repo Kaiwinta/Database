@@ -6,6 +6,8 @@ from PIL import Image , ImageTk
 import sqlite3
 
 conn = sqlite3.connect('user.db')
+colorpalette = ["#8e94f2","#9fa0ff","#ada7ff"]
+
 
 def main():
     """
@@ -31,7 +33,7 @@ def main():
     cadre(main)
 
     #Création d'une zone modifiable dans laquelle nous afficherons tous
-    fr1 = Frame(main, bg ='#327EF1')
+    fr1 = Frame(main, bg =colorpalette[0])
     fr1.pack(fill= 'both', expand= True)
 
     
@@ -61,11 +63,11 @@ def cadre(root):
         root (Tk()): une fenetre
     """
     liste_cote = ["left","right" , "top" , "bottom"]
-    liste_couleur = ["#c99b0e","#e1ad0f","#efbb1a","#f1c232","#f3c94a","#f4d062","#f6d77a"]
+    liste_couleur = ["#bbadff","#cbb2fe","#dab6fc","#ddbdfc","#e0c3fc"]
     
 
     for i in range(10):
-        couleur = liste_couleur[i%7]
+        couleur = liste_couleur[i%5]
         cote = liste_cote[i%4] 
 
         fill='x'
@@ -90,16 +92,16 @@ def menu1(frame):
         """
         menu2(frame)
 
-    framehaut = Frame(frame , bg = '#2864c0')
+    framehaut = Frame(frame , bg = colorpalette[1])
     framehaut.place(relx= 0.03 , rely=0.05 , relheight= 0.075 , relwidth= 0.94)
 
-    framebutton = Frame(frame, bg = '#2864c0')
+    framebutton = Frame(frame, bg = colorpalette[1])
     framebutton.place(relx=0.20 , relwidth= 0.60, rely= 0.2 , relheight=0.7)
 
-    text1 = Label(framehaut, text="Bienvenue dans l'outil de création de graphe d'un réseau social imaginaire", font=('Helvetica',14),bg = "#2864c0")
-    text1.place(relx = 0.12, rely=0.05)
+    titrePage1 = Label(framehaut, text="Bienvenue dans l'outil de création de graphe d'un réseau social imaginaire", font=('Helvetica',14),bg = colorpalette[1])
+    titrePage1.place(relx = 0.12, rely=0.05)
 
-    button1 = Button(framehaut, activebackground='blue', background='purple',height=1 ,width = 1,command=gotopage2)
+    button1 = Button(framehaut, activebackground=colorpalette[2], background='purple',height=1 ,width = 1,command=gotopage2)
     button1.pack( side = "right")
 
     
@@ -195,8 +197,8 @@ def menu2(frame):
                 possibiliteseconde = DataBasePart.recherche(valeur2 ,seconde, zone, valeur)
                 
             else:
-                possibilite = DataBasePart.recherche(valeur, zone, None, None)
-                possibiliteseconde = DataBasePart.recherche(None, seconde, zone, valeur)
+                possibilite = DataBasePart.recherche(valeur, zone, '', '')
+                possibiliteseconde = DataBasePart.recherche('', seconde, zone, valeur)
                 
             for i in possibilite:
                 liste.insert(END, i)
@@ -205,9 +207,9 @@ def menu2(frame):
                 liste2.insert(END, y)
         
     #Divising our page in Frame
-    framehaut = Frame(frame , bg = '#2864c0')
-    frameimg = Frame(frame ,bg='#2864c0')
-    framecrit = Frame(frame , bg = '#2864c0')
+    framehaut = Frame(frame , bg = colorpalette[1])
+    frameimg = Frame(frame ,bg=colorpalette[1])
+    framecrit = Frame(frame , bg = colorpalette[1])
 
     #Placing our frames
     framehaut.place(relx= 0.03 , rely=0.05 , relheight= 0.075 , relwidth= 0.94)
@@ -223,6 +225,9 @@ def menu2(frame):
     #A changer
     button1 = Button(framehaut, activebackground='blue', background='purple',height=1 ,width = 1,command=gotopage3)
     button1.pack(side ='right')
+    labelTitre = Label(framehaut, text="Recherche de personne",font=('Helvetica',14),bg = colorpalette[1])
+    labelTitre.place(relx = 0.4, rely=0.05)
+
     button1 = Button(framehaut, activebackground='blue', background='purple',height=1 ,width = 1,command=goback)
     button1.pack(side = "left")
 
@@ -230,13 +235,15 @@ def menu2(frame):
     labelnom = Label(framecrit , text='Nom' )
     labelprenom = Label(framecrit, text='Prenom')
 
-    entreeNom = Entry(framecrit, background='red')
-    entreePrenom = Entry(framecrit, background='blue')
+    entreeNom = Entry(framecrit, background=colorpalette[2])
+    entreePrenom = Entry(framecrit, background=colorpalette[2])
 
-    listeNom = Listbox(framecrit , bg='grey')
-    listePrenom = Listbox(framecrit , bg='grey')
+    listeNom = Listbox(framecrit , bg=colorpalette[2])
+    listePrenom = Listbox(framecrit , bg=colorpalette[2])
 
-    button1 = Button(framecrit, activebackground='blue', background='purple',height=1 ,width = 1,command=change)
+    buttonValiderNom = Button(framecrit,text="Valider Nom", activebackground='blue', background='purple',height=1 ,width = 1,command=change)
+    buttonValiderPrenom = Button(framecrit,text="Valider Prenom", activebackground='blue', background='purple',height=1 ,width = 1,command=change)    
+    buttonGraphe = Button(framecrit, text="Afficher les Liens",activebackground='blue', background='purple',height=1 ,width = 1,command=change)
 
     #We place all the object on the frame
     labelnom.place(rely=0.1 , relheight= 0.05 , relx = 0.05 , relwidth= 0.4)
@@ -248,15 +255,16 @@ def menu2(frame):
     listeNom.place(rely=0.3 , relheight= 0.3 , relx = 0.05 , relwidth= 0.4)
     listePrenom.place(rely=0.3 , relheight= 0.3 , relx = 0.55 , relwidth= 0.4)
 
-    button1.place(rely = 0.8, relx=0.35, relheight= 0.05 , relwidth= 0.3)
+    buttonValiderNom.place(rely = 0.62, relx=0.05, relheight= 0.05 , relwidth= 0.4)
+    buttonValiderPrenom.place(rely = 0.62, relx=0.55, relheight= 0.05 , relwidth= 0.4)
+    buttonGraphe.place(rely = 0.85, relx=0.35, relheight= 0.05 , relwidth= 0.3)
 
 
     #Binding all our event
     imgFrame.bind( "<Configure>",lambda event: resize_image(event, img,height,width))
-
     entreeNom.bind('<Key>', lambda event: actualiser(event, "Nom"))
-
     entreePrenom.bind('<Key>', lambda event: actualiser(event, "Prenom"))
+
     frame.mainloop()
 
 def menu3(frame):

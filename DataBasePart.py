@@ -82,7 +82,7 @@ def recherche(Entree,categorie,secondecate,secondeentree):
     c = conn.cursor()
     Liste_possible = []
 
-    if secondecate !=None:
+    if secondecate !='':
         #Verifie si l'on doit faire une requete imbriquer ou une simple
         requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+Entree+"%' AND "+secondecate+" LIKE '"+secondeentree+"%'"
     else:
@@ -94,11 +94,3 @@ def recherche(Entree,categorie,secondecate,secondeentree):
 
     print(requete)
     return Liste_possible
-
-"""
-#Jeu de Test
-print(recherche('M','Nom',None,None),'\t premier test juste Nom')
-print(recherche('M','Nom','Prenom','A'),'\t premier test juste Nom')
-print(recherche('T','Prenom',None,None),'\t premier test juste Nom')
-print(recherche('T','Prenom','Nom','F'),'\t premier test juste Nom')
-"""
