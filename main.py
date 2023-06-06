@@ -150,10 +150,13 @@ def menu2(frame):
         imgFrame.image = photo_img  # Keep a reference to the PhotoImage to prevent garbage collection
     
     def change():
+        
+        print(Nom,Prenom)
         if Nom != '' and Prenom !='':
+            print('bouhh')
             DataBasePart.afficher_graphe_perso(Nom,Prenom)
 
-            img = Image.open("Images/image2test.png")
+            img = Image.open("Images/Result.png")
             width, height = img.size
             photo_img = ImageTk.PhotoImage(img)
             imgFrame.config( image=photo_img)
@@ -213,11 +216,11 @@ def menu2(frame):
     
     def validationNom():
         Nom = listeNom.get(ANCHOR)
-        print(Nom)
+        return Nom
 
     def validationPrenom():
         Prenom = listePrenom.get(ANCHOR)
-        print(Prenom)
+        return Prenom
     #Divising our page in Frame
     framehaut = Frame(frame , bg = colorpalette[1])
     frameimg = Frame(frame ,bg=colorpalette[1])

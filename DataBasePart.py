@@ -9,6 +9,7 @@ dot = Digraph(comment = "Un simple dot", engine = 'circo')
 conn = sqlite3.connect('user.db')
 
 
+
 def afficher_graphe_perso(nom, prenom):
     """
         Objectif  :     Créer un dot Des liens d'une personne
@@ -23,45 +24,49 @@ def afficher_graphe_perso(nom, prenom):
     c = conn.cursor()
     requete = "SELECT * FROM Utilisateur WHERE Nom = '%s' And Prenom = '%s' "%(nom, prenom)
     User =  c.execute(requete).fetchall()[0]       #Fetchall() Permet d'avoir les résultat et [0][à] est la parti qui nous intérrese
+    print(User)
+    if User:
+        dot.node(str(User[0]),str(User[1:]))
 
-    dot.node(str(User[0]),str(User[1:]))
+        Liste_Follow = []
+        Liste_Follower = []
+        Liste_Proche = []
 
-    Liste_Follow = []
-    Liste_Follower = []
-    Liste_Proche = []
+        requete = "SELECT idFollowed FROM Follow WHERE IdFollower = %i"%User[0]
+        for row in c.execute(requete):
+            Liste_Follow.append(row[0])
 
-    requete = "SELECT idFollowed FROM Follow WHERE IdFollower = %i"%User[0]
-    for row in c.execute(requete):
-        Liste_Follow.append(row[0])
+        requete = "SELECT idFollower FROM Follow WHERE IdFollowed = %i"%User[0]
+        for row in c.execute(requete):
+            Liste_Follower.append(row[0])
 
-    requete = "SELECT idFollower FROM Follow WHERE IdFollowed = %i"%User[0]
-    for row in c.execute(requete):
-        Liste_Follower.append(row[0])
+        for i in Liste_Follow:
+            if i in Liste_Follower:
+                Liste_Proche.append(i)
+                Liste_Follow.remove(i)
+                Liste_Follower.remove(i)
 
-    for i in Liste_Follow:
-        if i in Liste_Follower:
-            Liste_Proche.append(i)
-            Liste_Follow.remove(i)
-            Liste_Follower.remove(i)
+        for i in range(len(Liste_Follow)) : 
+            Liste_Follow[i]=c.execute("SELECT * FROM Utilisateur WHERE IdUser = %i "%Liste_Follow[i]).fetchall()
+            dot.node(str(Liste_Follow[i][0][0]),str(Liste_Follow[i][0][1:]))
+            dot.edge(str(User[0]),str(Liste_Follow[i][0][0]), color = 'red')
 
-    for i in range(len(Liste_Follow)) : 
-        Liste_Follow[i]=c.execute("SELECT * FROM Utilisateur WHERE IdUser = %i "%Liste_Follow[i]).fetchall()
-        dot.node(str(Liste_Follow[i][0][0]),str(Liste_Follow[i][0][1:]))
-        dot.edge(str(User[0]),str(Liste_Follow[i][0][0]), color = 'red')
+        for i in range(len(Liste_Follower)) : 
+            Liste_Follower[i]=c.execute("SELECT * FROM Utilisateur WHERE IdUser = %i "%Liste_Follower[i]).fetchall()
+            dot.node(str(Liste_Follower[i][0][0]),str(Liste_Follower[i][0][1:]))
+            dot.edge(str(Liste_Follower[i][0][0]),str(User[0]), color = 'blue')
 
-    for i in range(len(Liste_Follower)) : 
-        Liste_Follower[i]=c.execute("SELECT * FROM Utilisateur WHERE IdUser = %i "%Liste_Follower[i]).fetchall()
-        dot.node(str(Liste_Follower[i][0][0]),str(Liste_Follower[i][0][1:]))
-        dot.edge(str(Liste_Follower[i][0][0]),str(User[0]), color = 'blue')
-
-    for i in range(len(Liste_Proche)) : 
-        Liste_Proche[i]=c.execute("SELECT * FROM Utilisateur WHERE IdUser = %i "%Liste_Proche[i]).fetchall()
-        dot.node(str(Liste_Proche[i][0][0]),str(Liste_Proche[i][0][1:]))
-        dot.edge(str(Liste_Proche[i][0][0]),str(User[0]), color = 'orange')
-        dot.edge(str(User[0]),str(Liste_Proche[i][0]), color = 'orange')
-
-
-    
+        for i in range(len(Liste_Proche)) : 
+            Liste_Proche[i]=c.execute("SELECT * FROM Utilisateur WHERE IdUser = %i "%Liste_Proche[i]).fetchall()
+            dot.node(str(Liste_Proche[i][0][0]),str(Liste_Proche[i][0][1:]))
+            dot.edge(str(Liste_Proche[i][0][0]),str(User[0]), color = 'orange')
+            dot.edge(str(User[0]),str(Liste_Proche[i][0]), color = 'orange')
+        dot.format="png"
+        dot.render("Images/Result",view=True,cleanup=True)
+        
+    else:
+        return 0
+        
     
 def recherche(Entree,categorie,secondecate,secondeentree):
     """
@@ -89,5 +94,5 @@ def recherche(Entree,categorie,secondecate,secondeentree):
     for row in c.execute(requete):
         Liste_possible.append(row[0])
 
-    print(requete)
     return Liste_possible
+
