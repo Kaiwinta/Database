@@ -2,31 +2,29 @@
 import sqlite3
 from graphviz import Digraph
 
-#Créer un Graphe
-dot = Digraph(comment = "Un simple graphe", engine = 'circo')
+#Créer un dot
+dot = Digraph(comment = "Un simple dot", engine = 'circo')
 
 #Relier Le python avec la base de donnée
 conn = sqlite3.connect('user.db')
 
 
-def afficher_graphe_perso(graphe, db, nom, prenom):
+def afficher_graphe_perso(nom, prenom):
     """
-        Objectif  :     Créer un graphe Des liens d'une personne
+        Objectif  :     Créer un dot Des liens d'une personne
         Variables : 
-            graphe  :   Le graphe sur lequel on va travailler
-            db      :   La Base de données des Utilisateurs et Liens
             nom     :   Le nom de la personne recherchée
             prenom  :   Le prenom de cette même personne
         
         Renvoie :
-            Une affichage des liens de cette personne sous forme de graphe
+            Une affichage des liens de cette personne sous forme de dot
             Les liens auront 3 couleurs différentes 
     """
-    c = db.cursor()
+    c = conn.cursor()
     requete = "SELECT * FROM Utilisateur WHERE Nom = '%s' And Prenom = '%s' "%(nom, prenom)
     User =  c.execute(requete).fetchall()[0]       #Fetchall() Permet d'avoir les résultat et [0][à] est la parti qui nous intérrese
 
-    graphe.node(str(User[0]),str(User[1:]))
+    dot.node(str(User[0]),str(User[1:]))
 
     Liste_Follow = []
     Liste_Follower = []
@@ -48,21 +46,20 @@ def afficher_graphe_perso(graphe, db, nom, prenom):
 
     for i in range(len(Liste_Follow)) : 
         Liste_Follow[i]=c.execute("SELECT * FROM Utilisateur WHERE IdUser = %i "%Liste_Follow[i]).fetchall()
-        graphe.node(str(Liste_Follow[i][0][0]),str(Liste_Follow[i][0][1:]))
-        graphe.edge(str(User[0]),str(Liste_Follow[i][0][0]), color = 'red')
+        dot.node(str(Liste_Follow[i][0][0]),str(Liste_Follow[i][0][1:]))
+        dot.edge(str(User[0]),str(Liste_Follow[i][0][0]), color = 'red')
 
     for i in range(len(Liste_Follower)) : 
         Liste_Follower[i]=c.execute("SELECT * FROM Utilisateur WHERE IdUser = %i "%Liste_Follower[i]).fetchall()
-        graphe.node(str(Liste_Follower[i][0][0]),str(Liste_Follower[i][0][1:]))
-        graphe.edge(str(Liste_Follower[i][0][0]),str(User[0]), color = 'blue')
+        dot.node(str(Liste_Follower[i][0][0]),str(Liste_Follower[i][0][1:]))
+        dot.edge(str(Liste_Follower[i][0][0]),str(User[0]), color = 'blue')
 
     for i in range(len(Liste_Proche)) : 
         Liste_Proche[i]=c.execute("SELECT * FROM Utilisateur WHERE IdUser = %i "%Liste_Proche[i]).fetchall()
-        graphe.node(str(Liste_Proche[i][0][0]),str(Liste_Proche[i][0][1:]))
-        graphe.edge(str(Liste_Proche[i][0][0]),str(User[0]), color = 'orange')
-        graphe.edge(str(User[0]),str(Liste_Proche[i][0]), color = 'orange')
+        dot.node(str(Liste_Proche[i][0][0]),str(Liste_Proche[i][0][1:]))
+        dot.edge(str(Liste_Proche[i][0][0]),str(User[0]), color = 'orange')
+        dot.edge(str(User[0]),str(Liste_Proche[i][0]), color = 'orange')
 
-    print(Liste_Follow)
 
     
     

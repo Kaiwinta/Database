@@ -114,6 +114,8 @@ def menu2(frame):
         frame (Frame()): Est un espace dans lequel on va afficher ce que l'on veut
     """
     MoreFunctions.delete_frame(frame)
+    Nom = ''
+    Prenom = ''
 
     def goback():
         menu1(frame)
@@ -148,12 +150,15 @@ def menu2(frame):
         imgFrame.image = photo_img  # Keep a reference to the PhotoImage to prevent garbage collection
     
     def change():
-        img = Image.open("Images/image2test.png")
-        width, height = img.size
-        photo_img = ImageTk.PhotoImage(img)
-        imgFrame.config( image=photo_img)
-        imgFrame.pack(fill='none',expand=TRUE,)
-        imgFrame.bind( "<Configure>",lambda event: resize_image(event, img,height,width))
+        if Nom != '' and Prenom !='':
+            DataBasePart.afficher_graphe_perso(Nom,Prenom)
+
+            img = Image.open("Images/image2test.png")
+            width, height = img.size
+            photo_img = ImageTk.PhotoImage(img)
+            imgFrame.config( image=photo_img)
+            imgFrame.pack(fill='none',expand=TRUE,)
+            imgFrame.bind( "<Configure>",lambda event: resize_image(event, img,height,width))
 
     def actualiser(event, zone):
         """
@@ -205,7 +210,14 @@ def menu2(frame):
             
             for y in possibiliteseconde:
                 liste2.insert(END, y)
-        
+    
+    def validationNom():
+        Nom = listeNom.get(ANCHOR)
+        print(Nom)
+
+    def validationPrenom():
+        Prenom = listePrenom.get(ANCHOR)
+        print(Prenom)
     #Divising our page in Frame
     framehaut = Frame(frame , bg = colorpalette[1])
     frameimg = Frame(frame ,bg=colorpalette[1])
@@ -241,8 +253,8 @@ def menu2(frame):
     listeNom = Listbox(framecrit , bg=colorpalette[2])
     listePrenom = Listbox(framecrit , bg=colorpalette[2])
 
-    buttonValiderNom = Button(framecrit,text="Valider Nom", activebackground='blue', background='purple',height=1 ,width = 1,command=change)
-    buttonValiderPrenom = Button(framecrit,text="Valider Prenom", activebackground='blue', background='purple',height=1 ,width = 1,command=change)    
+    buttonValiderNom = Button(framecrit,text="Valider Nom", activebackground='blue', background='purple',height=1 ,width = 1,command=validationNom)
+    buttonValiderPrenom = Button(framecrit,text="Valider Prenom", activebackground='blue', background='purple',height=1 ,width = 1,command=validationPrenom)    
     buttonGraphe = Button(framecrit, text="Afficher les Liens",activebackground='blue', background='purple',height=1 ,width = 1,command=change)
 
     #We place all the object on the frame
