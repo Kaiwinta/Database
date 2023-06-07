@@ -1,6 +1,7 @@
 #Importation des élements
 import sqlite3
 from graphviz import Digraph
+from os import remove
 
 #Créer un dot
 dot = Digraph(comment = "Un simple dot", engine = 'circo')
@@ -21,10 +22,11 @@ def afficher_graphe_perso(nom, prenom):
             Une affichage des liens de cette personne sous forme de dot
             Les liens auront 3 couleurs différentes 
     """
+    dot = Digraph(comment = "Un simple dot", engine = 'circo')
     c = conn.cursor()
     requete = "SELECT * FROM Utilisateur WHERE Nom = '%s' And Prenom = '%s' "%(nom, prenom)
     User =  c.execute(requete).fetchall()[0]       #Fetchall() Permet d'avoir les résultat et [0][à] est la parti qui nous intérrese
-    print(User)
+    
     if User:
         dot.node(str(User[0]),str(User[1:]))
 
@@ -62,7 +64,7 @@ def afficher_graphe_perso(nom, prenom):
             dot.edge(str(Liste_Proche[i][0][0]),str(User[0]), color = 'orange')
             dot.edge(str(User[0]),str(Liste_Proche[i][0]), color = 'orange')
         dot.format="png"
-        dot.render("Images/Result",view=True,cleanup=True)
+        dot.render("Images/Result",view=False,cleanup=False)
         
     else:
         return 0
