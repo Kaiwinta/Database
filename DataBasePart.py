@@ -95,6 +95,6 @@ def recherche(Entree,categorie,secondecate,secondeentree):
     #Ajout des résultat sous une meilleure forme dans la liste que l'on renvoie
     for row in c.execute(requete):
         Liste_possible.append(row[0])
-
+    
     return Liste_possible
 
