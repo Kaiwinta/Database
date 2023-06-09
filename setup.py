@@ -14,3 +14,5 @@ setup(
             "optimize":1,
         }}
 )
+
+#La commande : python setup.py build
