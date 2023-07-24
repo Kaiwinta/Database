@@ -123,7 +123,7 @@ def menu2(frame):
         menu3(frame)
 
     img = Image.open("Images/no_image.png")
-    width, height = img.size()
+    width, height = img.size
 
     def resize_image(event,img,height,width):
         

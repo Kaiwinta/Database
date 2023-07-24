@@ -98,3 +98,6 @@ def recherche(Entree,categorie,secondecate,secondeentree):
     
     return Liste_possible
 
+
+
+
