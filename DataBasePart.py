@@ -23,6 +23,7 @@ def afficher_graphe_perso(nom, prenom):
             Les liens auront 3 couleurs différentes 
     """
     dot = Digraph(comment = "Un simple dot", engine = 'circo')
+    
     c = conn.cursor()
     requete = "SELECT * FROM Utilisateur WHERE Nom = '%s' And Prenom = '%s' "%(nom, prenom)
     User =  c.execute(requete).fetchall()[0]       #Fetchall() Permet d'avoir les résultat et [0][à] est la parti qui nous intérrese
@@ -93,6 +94,7 @@ def recherche(Entree,categorie,secondecate,secondeentree):
         requete = "SELECT DISTINCT "+categorie+" FROM Utilisateur WHERE "+categorie+" LIKE '"+Entree+"%'"
     
     #Ajout des résultat sous une meilleure forme dans la liste que l'on renvoie
+
     for row in c.execute(requete):
         Liste_possible.append(row[0])
     
