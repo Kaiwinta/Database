@@ -1,8 +1,12 @@
 // Un simple dot
 digraph {
-	25 [label="('Asher', 'Baker')"]
+	22 [label="('Amelia', 'White')"]
+	94 [label="('Jocelyn', 'Edwards')"]
+	22 -> 94 [color=red]
 	100 [label="('Josiah', 'Thompson')"]
-	25 -> 100 [color=red]
-	71 [label="('Gavin', 'Cook')"]
-	71 -> 25 [color=blue]
+	22 -> 100 [color=red]
+	110 [label="('Katherine', 'Cooper')"]
+	22 -> 110 [color=red]
+	32 [label="('Brandon', 'Cooper')"]
+	32 -> 22 [color=blue]
 }
