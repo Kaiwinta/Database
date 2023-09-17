@@ -47,7 +47,6 @@ def main():
     #pour qu'il puisse renvoyer un signal
     MoreFunctions.loading(fr1,my_callback)
 
-
     #Lancement de La fenètre
     main.mainloop()
  
